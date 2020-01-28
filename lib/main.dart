@@ -36,6 +36,18 @@ class _HomeState extends State<Home> {
             socket.onConnect((data){
               print("conectou");
             });
+            socket.onConnectError((listener){
+              print("Connect error");
+              print(listener);
+            });
+            socket.onConnecting((listener){
+              print("Connecting");
+              print(listener);
+            });
+            socket.onConnectTimeout((listener){
+              print("Connect timeout");
+              print(listener);
+            });
             socket.connect();
             print("apertou o btn");
           },
