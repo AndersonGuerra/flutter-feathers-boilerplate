@@ -1,6 +1,7 @@
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:adhara_socket_io/manager.dart';
 import 'package:adhara_socket_io/socket.dart';
+import 'package:adhara_test/store/messages.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MaterialApp(
@@ -13,13 +14,31 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<String> users = ["Alfredoaldo"];
+  final messagesController = Messages();
+  List<String> messages = [];
   SocketIOManager manager = SocketIOManager();
   SocketIO socket;
+  var user;
 
   @override
   void initState() {
     super.initState();
+    manager.createInstance(SocketOptions(
+      "http://10.0.2.2:3030/",
+      transports: [Transports.WEB_SOCKET]
+    )).then((socketResult){
+      socket = socketResult;
+      socket.onConnect((data) async {
+        print("conectou");
+        user = await socket.emitWithAck("create", ["authentication", {
+          "strategy": "local",
+          "email": "a@a.com",
+          "password": "123@mudar"
+        }]);
+        print(user[0]);
+      });
+      socket.connect();
+    });
   }
 
   @override
@@ -29,35 +48,25 @@ class _HomeState extends State<Home> {
         MaterialButton(
           child: Text("btn"),
           onPressed: () async {
-            socket = await manager.createInstance(SocketOptions(
-              "http://10.0.2.2:3030/",
-              transports: [Transports.WEB_SOCKET]
-            ));
-            socket.onConnect((data){
-              print("conectou");
-            });
-            socket.onConnectError((listener){
-              print("Connect error");
-              print(listener);
-            });
-            socket.onConnecting((listener){
-              print("Connecting");
-              print(listener);
-            });
-            socket.onConnectTimeout((listener){
-              print("Connect timeout");
-              print(listener);
-            });
-            socket.connect();
-            print("apertou o btn");
+            if (await socket.isConnected()){
+              var response = await socket.emitWithAck("find", ["messages"]);
+              List messageList = response[0];
+              messages = [];
+              messageList.forEach((message){
+                messages.add(message["text"]);
+              });
+              setState(() {
+                
+              });
+            }
           },
         )
       ],),
       body: ListView.builder(
-        itemCount: users.length,
+        itemCount: messagesController.messages.length,
         itemBuilder: (ctx, index){
           return ListTile(
-            title: Text(users[index]),
+            title: Text(messagesController.messages[index].title),
           );
         },
       ),
