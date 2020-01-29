@@ -6,10 +6,17 @@ class Messages = MessagesBase with _$Messages;
 
 abstract class MessagesBase with Store {
   @observable
-  List<Message> messages = [];
+  ObservableList<Message> messages = ObservableList();
 
   @action
   addMessage(Message message) {
     messages.add(message);
   }
+
+  @action
+  removeMessage(Message message) {
+    messages.removeWhere((msg)=>msg.id == message.id);
+  }
+
+  dispose(){}
 }

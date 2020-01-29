@@ -26,6 +26,7 @@ dependencies:
   adhara_socket_io: ^0.4.1
   mobx: ^1.0.0
   flutter_mobx: ^1.0.1
+  provider:
 
 dev_dependencies:
   flutter_test:

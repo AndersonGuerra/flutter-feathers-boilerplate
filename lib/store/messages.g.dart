@@ -12,14 +12,14 @@ mixin _$Messages on MessagesBase, Store {
   final _$messagesAtom = Atom(name: 'MessagesBase.messages');
 
   @override
-  List<Message> get messages {
+  ObservableList<Message> get messages {
     _$messagesAtom.context.enforceReadPolicy(_$messagesAtom);
     _$messagesAtom.reportObserved();
     return super.messages;
   }
 
   @override
-  set messages(List<Message> value) {
+  set messages(ObservableList<Message> value) {
     _$messagesAtom.context.conditionallyRunInAction(() {
       super.messages = value;
       _$messagesAtom.reportChanged();
@@ -33,6 +33,16 @@ mixin _$Messages on MessagesBase, Store {
     final _$actionInfo = _$MessagesBaseActionController.startAction();
     try {
       return super.addMessage(message);
+    } finally {
+      _$MessagesBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic removeMessage(Message message) {
+    final _$actionInfo = _$MessagesBaseActionController.startAction();
+    try {
+      return super.removeMessage(message);
     } finally {
       _$MessagesBaseActionController.endAction(_$actionInfo);
     }
