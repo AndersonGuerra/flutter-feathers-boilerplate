@@ -1,5 +1,6 @@
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:adhara_test/models/message.dart';
+import 'package:adhara_test/screens/login.dart';
 import 'package:adhara_test/services/socket.dart';
 import 'package:adhara_test/store/messages.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'package:provider/provider.dart';
 
 void main() => runApp(MaterialApp(
   home: MultiProvider(
-    child: InitialScreen(),
+    child: Login(),
     providers: [
       Provider<Messages>(
         create: (_) => Messages(),
@@ -38,7 +39,6 @@ class InitialScreen extends StatelessWidget {
               "password": "123@mudar"
             }]);
             print(Connector.user);
-            print("conectado");
             Connector.socket.emitWithAck("find", ["messages"]).then((response){
               List messageList = response[0];
               print(response);
