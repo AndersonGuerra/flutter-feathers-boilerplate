@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 void main() => runApp(MaterialApp(
   home: MultiProvider(
-    child: Login(),
+    child: InitialScreen(),
     providers: [
       Provider<Messages>(
         create: (_) => Messages(),
@@ -30,28 +30,17 @@ class InitialScreen extends StatelessWidget {
       )),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          Connector.socket = snapshot.data;
-          Connector.socket.onConnect((data) async {
-            print("on connect");
-            Connector.user = await Connector.socket.emitWithAck("create", ["authentication", {
-              "strategy": "local",
-              "email": "a@a.com",
-              "password": "123@mudar"
-            }]);
-            print(Connector.user);
-            Connector.socket.emitWithAck("find", ["messages"]).then((response){
-              List messageList = response[0];
-              print(response);
-              messageList.forEach((message){
-                messagesController.addMessage(Message(message["text"], message["_id"]));
-              });
-            });
-          });
-          Connector.socket.connect();
-          Connector.socket.on("messages created", (message){
-            messagesController.addMessage(Message(message["text"], message["_id"]));
-          });
-          return Home();
+          Connector.stablishInitialConnection(snapshot.data, messagesController);
+          return ValueListenableBuilder(
+            valueListenable: Connector.user, 
+            builder: (BuildContext context, Map value, Widget child) {
+              print(value);
+              if (value["accessToken"] != null) {
+                return Home();
+              }
+              return Login();
+            },
+          );
         }
         return Center(child: CircularProgressIndicator(),);
       },
