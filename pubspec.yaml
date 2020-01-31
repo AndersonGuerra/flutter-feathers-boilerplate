@@ -27,6 +27,7 @@ dependencies:
   mobx: ^1.0.0
   flutter_mobx: ^1.0.1
   provider:
+  path_provider: ^1.5.1
 
 dev_dependencies:
   flutter_test:

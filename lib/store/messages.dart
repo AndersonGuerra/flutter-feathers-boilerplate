@@ -18,5 +18,10 @@ abstract class MessagesBase with Store {
     messages.removeWhere((msg)=>msg.id == message.id);
   }
 
+  @action
+  clearMessages(){
+    messages = ObservableList();
+  }
+
   dispose(){}
 }

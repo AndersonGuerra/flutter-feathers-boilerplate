@@ -1,7 +1,7 @@
 import 'package:adhara_socket_io/adhara_socket_io.dart';
-import 'package:adhara_test/models/message.dart';
 import 'package:adhara_test/screens/login.dart';
-import 'package:adhara_test/services/socket.dart';
+import 'package:adhara_test/services/messages_service.dart';
+import 'package:adhara_test/utils/socket.dart';
 import 'package:adhara_test/store/messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -30,15 +30,16 @@ class InitialScreen extends StatelessWidget {
       )),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
+          print("initial");
           Connector.stablishInitialConnection(snapshot.data, messagesController);
           return ValueListenableBuilder(
             valueListenable: Connector.user, 
             builder: (BuildContext context, Map value, Widget child) {
-              print(value);
               if (value["accessToken"] != null) {
                 return Home();
+              } else {
+                return Login();
               }
-              return Login();
             },
           );
         }
@@ -71,7 +72,7 @@ class _HomeState extends State<Home> {
       ],),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Connector.createMessage("teste");
+          MessagesService.createMessage("teste");
         },
       ),
       body: Observer(builder: (_) {

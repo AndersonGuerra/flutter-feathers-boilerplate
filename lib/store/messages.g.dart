@@ -47,4 +47,14 @@ mixin _$Messages on MessagesBase, Store {
       _$MessagesBaseActionController.endAction(_$actionInfo);
     }
   }
+
+  @override
+  dynamic clearMessages() {
+    final _$actionInfo = _$MessagesBaseActionController.startAction();
+    try {
+      return super.clearMessages();
+    } finally {
+      _$MessagesBaseActionController.endAction(_$actionInfo);
+    }
+  }
 }
