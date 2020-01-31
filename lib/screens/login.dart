@@ -1,9 +1,13 @@
 import 'package:adhara_test/services/auth.dart';
 import 'package:adhara_test/models/login_form.dart';
+import 'package:adhara_test/widgets/default_button.dart';
+import 'package:adhara_test/widgets/default_textfield.dart';
 import 'package:flutter/material.dart';
 
-Widget defaultTextField(Function(String) onChanged, IconData icon, {bool isHidden: false}){
+Widget defaultTextField({Function(String) onChanged, IconData icon, bool isHidden: false, 
+  TextEditingController controller}){
   return TextField(
+    controller: controller,
     onChanged: onChanged,
     obscureText: isHidden,
     decoration: InputDecoration(
@@ -14,17 +18,6 @@ Widget defaultTextField(Function(String) onChanged, IconData icon, {bool isHidde
         borderRadius: BorderRadius.all(Radius.circular(16))
       )
     ),
-  );
-}
-
-Widget defaultButton({Function onPressed}) {
-  return MaterialButton(
-    padding: EdgeInsets.all(20.0),
-    minWidth: double.infinity,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-    color: Colors.purple,
-    child: Text("Entrar", style: TextStyle(color: Colors.white),), 
-    onPressed: onPressed,
   );
 }
 
@@ -46,13 +39,13 @@ class _LoginState extends State<Login> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            defaultTextField(loginForm.changeEmail, Icons.email),
+            DefaultTextField(onChanged: loginForm.changeEmail, icon: Icons.email),
             SizedBox(height: 10,),
-            defaultTextField(loginForm.changePassword, Icons.security, isHidden: true),
+            DefaultTextField(onChanged: loginForm.changePassword, icon: Icons.security, isHidden: true),
             SizedBox(height: 10,),
-            defaultButton(onPressed: () async {
+            DefaultButton(onPressed: () async {
               await Auth.login(email: loginForm.email,password: loginForm.password);
-            })
+            }, title: "Entrar")
           ],
         ),
       ),

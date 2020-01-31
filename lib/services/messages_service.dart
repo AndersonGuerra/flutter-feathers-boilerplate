@@ -27,7 +27,7 @@ class MessagesService {
 
   static createMessage(String message) async {
     if (Connector.user.value["accessToken"] != null) {
-      Connector.socket.emitWithAck("create", ["messages", {"text": message}]).then((r){
+      await Connector.socket.emitWithAck("create", ["messages", {"text": message}]).then((r){
         
       }).catchError((onError){
         

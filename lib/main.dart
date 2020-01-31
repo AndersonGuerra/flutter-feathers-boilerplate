@@ -1,8 +1,8 @@
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:adhara_test/screens/login.dart';
-import 'package:adhara_test/services/messages_service.dart';
 import 'package:adhara_test/utils/socket.dart';
 import 'package:adhara_test/store/messages.dart';
+import 'package:adhara_test/widgets/message_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +72,12 @@ class _HomeState extends State<Home> {
       ],),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          MessagesService.createMessage("teste");
+          showDialog(
+            context:  context,
+            builder:  (BuildContext context) {
+              return MessageForm();
+            },
+          );
         },
       ),
       body: Observer(builder: (_) {
