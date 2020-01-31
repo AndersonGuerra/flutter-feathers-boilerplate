@@ -27,6 +27,7 @@ class MessageForm extends StatelessWidget {
                 ),
                 Spacer(),
                 DefaultButton(
+                  minWidth: 100,
                   title: "Inserir",
                   onPressed: () async {
                     await MessagesService.createMessage(messageController.text.toString());
