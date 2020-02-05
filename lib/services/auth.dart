@@ -7,11 +7,11 @@ class Auth {
       List<dynamic> userAux;
       if (isJwt) {
         String accessToken = await readToken();
-        print(accessToken);
         userAux = await Connector.socket.emitWithAck("create", ["authentication", {
           "strategy": "jwt",
           "accessToken": accessToken
         }]);
+        // lidar com os erros
       } else {
         userAux = await Connector.socket.emitWithAck("create", ["authentication", {
           "strategy": "local",

@@ -23,14 +23,25 @@ class InitialScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final messagesController = Provider.of<Messages>(context);
-    return FutureBuilder(
+    if (Connector.socket != null) {
+      print("deveria chegar aqui primeiro");
+      Connector.manager.clearInstance(Connector.socket).then((_){
+        print("limpou para conectar do 0");
+        return initialScreen(messagesController);
+      });
+    }
+    print("primeira conexão");
+    return initialScreen(messagesController);
+}
+
+Widget initialScreen(Messages messagesController){
+  return FutureBuilder(
       future: Connector.manager.createInstance(SocketOptions(
         "http://10.0.2.2:3030/",
         transports: [Transports.WEB_SOCKET]
       )),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          print("initial");
           Connector.stablishInitialConnection(snapshot.data, messagesController);
           return ValueListenableBuilder(
             valueListenable: Connector.user, 

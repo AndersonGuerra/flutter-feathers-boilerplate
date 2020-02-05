@@ -5,8 +5,10 @@ import 'package:adhara_test/utils/socket.dart';
 class MessagesService {
 
   static setConfigs(Messages messagesController) {
-    _seedMessages(messagesController);
-    _onCreated(messagesController);
+    if (Connector.user.value["accessToken"] != null) {
+      _seedMessages(messagesController);
+      _onCreated(messagesController);
+    }
   }
 
   static _onCreated(Messages messagesController){
@@ -17,6 +19,7 @@ class MessagesService {
 
   static _seedMessages(Messages messagesController) {
     Connector.socket.emitWithAck("find", ["messages"]).then((response){
+      print(response[0]);
       List messageList = response[0];
       messagesController.clearMessages();
       messageList.forEach((message){
