@@ -1,5 +1,6 @@
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:adhara_test/screens/login.dart';
+import 'package:adhara_test/services/messages_service.dart';
 import 'package:adhara_test/utils/socket.dart';
 import 'package:adhara_test/store/messages.dart';
 import 'package:adhara_test/widgets/message_form.dart';
@@ -47,6 +48,7 @@ Widget initialScreen(Messages messagesController){
             valueListenable: Connector.user, 
             builder: (BuildContext context, Map value, Widget child) {
               if (value["accessToken"] != null) {
+                MessagesService.setConfigs(messagesController);
                 return Home();
               } else {
                 return Login();

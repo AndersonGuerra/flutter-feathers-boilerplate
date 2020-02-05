@@ -19,12 +19,13 @@ class MessagesService {
 
   static _seedMessages(Messages messagesController) {
     Connector.socket.emitWithAck("find", ["messages"]).then((response){
-      print(response[0]);
-      List messageList = response[0];
-      messagesController.clearMessages();
-      messageList.forEach((message){
-        messagesController.addMessage(Message(message["text"], message["_id"]));
-      });
+      if (response[0].runtimeType == List<dynamic>()) {
+        List messageList = response[0];
+        messagesController.clearMessages();
+        messageList.forEach((message){
+          messagesController.addMessage(Message(message["text"], message["_id"]));
+        });
+      }
     });
   }
 

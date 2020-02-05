@@ -1,7 +1,6 @@
 import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:adhara_socket_io/manager.dart';
 import 'package:adhara_test/services/auth.dart';
-import 'package:adhara_test/services/messages_service.dart';
 import 'package:adhara_test/store/messages.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +13,6 @@ class Connector {
     Connector.socket = socket;
     Connector.socket.onConnect((data) async {
       await Auth.login(isJwt: true);
-      MessagesService.setConfigs(messagesController);
     });
     Connector.socket.onReconnecting((listener) async {
       await Auth.login(isJwt: true);
